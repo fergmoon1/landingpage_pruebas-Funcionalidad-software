@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía & Investigación - Pruebas de Funcionalidad Web</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .section-title {
+            color: var(--secondary);
+            font-size: 2rem;
+            margin: 45px 0 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .card h2 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step, .research-question {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 20px 20px 20px 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .research-question {
+            border-left: 4px solid var(--accent);
+            padding: 25px 20px 25px 20px;
+        }
+        
+        .step-number, .question-number {
+            background: var(--success);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .question-number {
+            background: var(--accent);
+            width: 35px;
+            height: 35px;
+            font-size: 1.1rem;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .question-title {
+            color: var(--dark);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .tool-grid, .tools-grid, .browser-comparison, .testing-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .tools-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .testing-matrix {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .tool-item, .browser-item, .matrix-category {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .matrix-category {
+            padding: 20px;
+        }
+        .matrix-category h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 5px;
+        }
+        .browser-item .browser-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checklist li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .phase-indicator {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .conclusion {
+            background: #ecfdf5;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+            border-left: 4px solid var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            .section-title {
+                font-size: 1.3rem;
+                gap: 7px;
+            }
+            .testing-matrix { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Guía & Investigación de Pruebas de Funcionalidad Web</h1>
+            <p class="subtitle">
+                GA10-220501097-AA7-EV01 - Metodología General para Testing de Aplicaciones Web <br>
+                <span style="font-weight:400;">Respuestas a las preguntas de investigación sobre testing de sitios web publicados</span>
+            </p>
+        </div>
+
+        <!-- Sección: Guía Completa -->
+        <div class="section-title">📋 Guía Completa de Testing</div>
+        <!-- Introducción -->
+        <div class="card">
+            <h2>📋 Introducción</h2>
+            <p>Esta guía proporciona una metodología completa y general para realizar pruebas de funcionalidad en cualquier aplicación web desplegada en internet. El proceso es aplicable a sitios estáticos, aplicaciones web progresivas (PWA), y aplicaciones web complejas.</p>
+            <div class="info-box">
+                <strong>⚠️ Nota:</strong> Esta metodología es genérica y puede adaptarse a cualquier tipo de aplicación web, independientemente de su tecnología o complejidad.
+            </div>
+        </div>
+
+        <!-- Fase 1: Preparación -->
+        <div class="card">
+            <h2>🔧 Fase 1: Preparación del Entorno de Pruebas</h2>
+            <div class="phase-indicator">Configuración Inicial</div>
+            <div class="step">
+                <h3><span class="step-number">1</span> Definición del Alcance de Pruebas</h3>
+                <p>Identificar los componentes críticos de la aplicación web:</p>
+                <ul class="checklist">
+                    <li>Funcionalidades core de la aplicación</li>
+                    <li>Integraciones con servicios externos</li>
+                    <li>Flujos de usuario principales</li>
+                    <li>Características de seguridad críticas</li>
+                    <li>Requisitos de rendimiento</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">2</span> Configuración de Herramientas de Testing</h3>
+                <p><strong>Herramientas esenciales para el proceso:</strong></p>
+                <div class="tool-grid">
+                    <div class="tool-item">Navegadores múltiples</div>
+                    <div class="tool-item">Herramientas de desarrollo</div>
+                    <div class="tool-item">Monitoreo de red</div>
+                    <div class="tool-item">Validadores de código</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fase 2: Verificación de Infraestructura -->
+        <div class="card">
+            <h2>🌐 Fase 2: Verificación de Infraestructura y DNS</h2>
+            <div class="phase-indicator">Validación Técnica</div>
+            <div class="step">
+                <h3><span class="step-number">3</span> Verificación de Configuración DNS</h3>
+                <p>Validar la correcta configuración de registros DNS para el dominio:</p>
+                <div class="code-block">
+                    # Comando para verificar registros CNAME<br>
+                    nslookup -type=CNAME tu-dominio.com<br><br>
+                    # Comando para verificar registros A<br>
+                    nslookup -type=A tu-dominio.com
+                </div>
+                <p><strong>Checklist de validación DNS:</strong></p>
+                <ul class="checklist">
+                    <li>Resolución correcta del dominio principal</li>
+                    <li>Configuración adecuada de subdominios (www, api, etc.)</li>
+                    <li>Propagación DNS completa en diferentes ubicaciones</li>
+                    <li>Registros MX configurados (si aplica)</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">4</span> Validación de Certificado SSL/TLS</h3>
+                <p>Verificar la configuración de seguridad:</p>
+                <ul class="checklist">
+                    <li>Certificado SSL válido y vigente</li>
+                    <li>Configuración correcta de redirecciones HTTP → HTTPS</li>
+                    <li>Headers de seguridad implementados</li>
+                    <li>Cipher suites adecuados</li>
+                </ul>
+                <div class="tool-grid">
+                    <div class="tool-item">SSL Labs Test</div>
+                    <div class="tool-item">Security Headers</div>
+                    <div class="tool-item">Mozilla Observatory</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fase 3: Pruebas Funcionales -->
+        <div class="card">
+            <h2>🧪 Fase 3: Pruebas Funcionales Core</h2>
+            <div class="phase-indicator">Validación de Funcionalidades</div>
+            <div class="step">
+                <h3><span class="step-number">5</span> Pruebas de Navegación y Estructura</h3>
+                <p><strong>Elementos a verificar:</strong></p>
+                <ul class="checklist">
+                    <li>Menús de navegación funcionales</li>
+                    <li>Enlaces internos y externos operativos</li>
+                    <li>Estructura de URLs consistente</li>
+                    <li>Breadcrumbs y rutas de navegación</li>
+                    <li>Paginación y scroll infinito</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">6</span> Pruebas de Formularios y Entrada de Datos</h3>
+                <p><strong>Validaciones a realizar:</strong></p>
+                <ul class="checklist">
+                    <li>Validación client-side y server-side</li>
+                    <li>Manejo de errores y mensajes al usuario</li>
+                    <li>Submit y procesamiento de formularios</li>
+                    <li>Upload de archivos (si aplica)</li>
+                    <li>Autocompletado y sugerencias</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">7</span> Pruebas de Contenido Dinámico</h3>
+                <p><strong>Para aplicaciones con contenido interactivo:</strong></p>
+                <ul class="checklist">
+                    <li>Actualizaciones en tiempo real</li>
+                    <li>Lazy loading de contenido</li>
+                    <li>Filtros y búsquedas</li>
+                    <li>Ordenamiento y categorización</li>
+                    <li>Comentarios y interacciones sociales</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Fase 4: Pruebas de Compatibilidad -->
+        <div class="card">
+            <h2>📱 Fase 4: Pruebas de Compatibilidad Multiplataforma</h2>
+            <div class="phase-indicator">Cross-Browser & Responsive</div>
+            <div class="step">
+                <h3><span class="step-number">8</span> Pruebas Cross-Browser</h3>
+                <p><strong>Navegadores objetivo para testing:</strong></p>
+                <div class="tool-grid">
+                    <div class="tool-item">Chrome (últimas 2 versiones)</div>
+                    <div class="tool-item">Firefox (últimas 2 versiones)</div>
+                    <div class="tool-item">Safari (macOS & iOS)</div>
+                    <div class="tool-item">Edge (últimas 2 versiones)</div>
+                </div>
+                <p><strong>Aspectos a verificar en cada navegador:</strong></p>
+                <ul class="checklist">
+                    <li>Renderizado visual consistente</li>
+                    <li>Funcionalidad JavaScript</li>
+                    <li>Comportamiento de CSS y animaciones</li>
+                    <li>APIs del navegador específicas</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">9</span> Pruebas Responsive Design</h3>
+                <p><strong>Breakpoints críticos a verificar:</strong></p>
+                <ul class="checklist">
+                    <li>Mobile: 320px - 768px</li>
+                    <li>Tablet: 768px - 1024px</li>
+                    <li>Desktop: 1024px - 1440px</li>
+                    <li>Large Desktop: 1440px+</li>
+                </ul>
+                <p><strong>Elementos responsive a validar:</strong></p>
+                <ul class="checklist">
+                    <li>Layout y reflow de contenido</li>
+                    <li>Touch targets (mínimo 44px en móvil)</li>
+                    <li>Tipografía y espaciado</li>
+                    <li>Imágenes y media queries</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">10</span> Pruebas en Dispositivos Móviles</h3>
+                <p><strong>Dispositivos y plataformas críticas:</strong></p>
+                <div class="tool-grid">
+                    <div class="tool-item">iOS (Safari)</div>
+                    <div class="tool-item">Android (Chrome)</div>
+                    <div class="tool-item">Tablets (iPad/Android)</div>
+                    <div class="tool-item">Dispositivos táctiles</div>
+                </div>
+                <div class="warning-box">
+                    <strong>💡 Importante:</strong> Considerar diferentes versiones de SO y navegadores en dispositivos móviles, ya que la fragmentación es mayor que en desktop.
+                </div>
+            </div>
+        </div>
+
+        <!-- Fase 5: Pruebas de Rendimiento -->
+        <div class="card">
+            <h2>⚡ Fase 5: Pruebas de Rendimiento y UX</h2>
+            <div class="phase-indicator">Performance & Experience</div>
+            <div class="step">
+                <h3><span class="step-number">11</span> Métricas Core Web Vitals</h3>
+                <p><strong>Métricas esenciales de Google:</strong></p>
+                <ul class="checklist">
+                    <li>LCP (Largest Contentful Paint) - &lt; 2.5s</li>
+                    <li>FID (First Input Delay) - &lt; 100ms</li>
+                    <li>CLS (Cumulative Layout Shift) - &lt; 0.1</li>
+                </ul>
+                <p><strong>Herramientas de medición:</strong></p>
+                <div class="tool-grid">
+                    <div class="tool-item">Google PageSpeed</div>
+                    <div class="tool-item">Lighthouse</div>
+                    <div class="tool-item">WebPageTest</div>
+                    <div class="tool-item">GTmetrix</div>
+                </div>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">12</span> Pruebas de Carga y Estrés</h3>
+                <p><strong>Escenarios a simular:</strong></p>
+                <ul class="checklist">
+                    <li>Carga inicial de la aplicación</li>
+                    <li>Múltiples usuarios concurrentes</li>
+                    <li>Condiciones de red limitada (3G, LTE)</li>
+                    <li>Uso prolongado de la aplicación</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Fase 6: Pruebas de Seguridad -->
+        <div class="card">
+            <h2>🔒 Fase 6: Pruebas de Seguridad Básicas</h2>
+            <div class="phase-indicator">Security Testing</div>
+            <div class="step">
+                <h3><span class="step-number">13</span> Validaciones de Seguridad Esenciales</h3>
+                <p><strong>Checklist de seguridad básica:</strong></p>
+                <ul class="checklist">
+                    <li>Protección contra XSS (Cross-Site Scripting)</li>
+                    <li>Validación de inputs en frontend y backend</li>
+                    <li>Protección CSRF (Cross-Site Request Forgery)</li>
+                    <li>Headers de seguridad implementados</li>
+                    <li>Manejo seguro de sesiones y cookies</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">14</span> Pruebas de Autenticación y Autorización</h3>
+                <p><strong>Para aplicaciones con usuarios:</strong></p>
+                <ul class="checklist">
+                    <li>Flujos de login/logout</li>
+                    <li>Recuperación de contraseña</li>
+                    <li>Control de acceso por roles</li>
+                    <li>Protección de rutas privadas</li>
+                    <li>Manejo de tokens y sesiones</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Fase 7: Documentación -->
+        <div class="card">
+            <h2>📊 Fase 7: Documentación y Reporte</h2>
+            <div class="phase-indicator">Entrega de Resultados</div>
+            <div class="step">
+                <h3><span class="step-number">15</span> Estructura del Reporte de Pruebas</h3>
+                <p><strong>Elementos esenciales del reporte final:</strong></p>
+                <ul class="checklist">
+                    <li>Resumen ejecutivo de hallazgos</li>
+                    <li>Metodología aplicada</li>
+                    <li>Resultados por categoría de pruebas</li>
+                    <li>Issues identificados (críticos, altos, medios, bajos)</li>
+                    <li>Recomendaciones de mejora</li>
+                    <li>Evidencias (screenshots, logs, métricas)</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3><span class="step-number">16</span> Herramientas de Documentación</h3>
+                <p><strong>Plataformas recomendadas:</strong></p>
+                <div class="tool-grid">
+                    <div class="tool-item">TestRail</div>
+                    <div class="tool-item">Jira</div>
+                    <div class="tool-item">Google Sheets</div>
+                    <div class="tool-item">Notion</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusión Guía -->
+        <div class="card">
+            <h2>✅ Conclusión y Mejores Prácticas</h2>
+            <div class="step">
+                <h3>Resumen de la Metodología</h3>
+                <p>Esta guía proporciona un framework completo para testing de aplicaciones web que incluye:</p>
+                <ul class="checklist">
+                    <li><strong>7 fases</strong> estructuradas de testing</li>
+                    <li><strong>16 pasos</strong> detallados de ejecución</li>
+                    <li><strong>Múltiples categorías</strong> de pruebas</li>
+                    <li><strong>Herramientas específicas</strong> para cada tipo de test</li>
+                    <li><strong>Checklists</strong> completos para validación</li>
+                </ul>
+                <div class="info-box">
+                    <strong>🎯 Punto clave:</strong> Esta metodología es adaptable y escalable. Puede aplicarse tanto a proyectos pequeños como a aplicaciones empresariales complejas, ajustando el nivel de profundidad según las necesidades específicas del proyecto.
+                </div>
+                <p><strong>Beneficios de seguir esta metodología:</strong></p>
+                <ul class="checklist">
+                    <li>Detección temprana de problemas</li>
+                    <li>Mejora en la calidad del producto</li>
+                    <li>Reducción de riesgos en producción</li>
+                    <li>Documentación consistente del proceso</li>
+                    <li>Mejora continua mediante métricas</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Sección: Investigación -->
+        <div class="section-title">🔍 Investigación y Preguntas Frecuentes</div>
+        <!-- Pregunta 1 -->
+        <div class="card">
+            <div class="research-question">
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <div class="question-title">¿Cómo verificar si un dominio está bien configurado?</div>
+                </div>
+                <p><strong>Investigación:</strong> La verificación de la configuración de un dominio implica múltiples capas de validación técnica que aseguran su correcto funcionamiento en internet.</p>
+                <div class="methodology">
+                    <h4>📋 Metodología de Verificación Completa:</h4>
+                    <h5>1. Validación de Registros DNS</h5>
+                    <div class="code-block">
+                        # Consulta de registros CNAME<br>
+                        nslookup -type=CNAME tudominio.com<br><br>
+                        # Consulta de registros A<br>
+                        nslookup -type=A tudominio.com<br><br>
+                        # Verificación de propagación global<br>
+                        dig +trace tudominio.com
+                    </div>
+                    <h5>2. Verificación de Configuración SSL/TLS</h5>
+                    <ul class="checklist">
+                        <li>Certificado válido y vigente</li>
+                        <li>Configuración correcta de la cadena de certificados</li>
+                        <li>Cipher suites adecuados y seguros</li>
+                        <li>Redirección HTTP → HTTPS automática</li>
+                    </ul>
+                    <h5>3. Herramientas Especializadas</h5>
+                    <div class="tools-grid">
+                        <div class="tool-item">DNS Checker</div>
+                        <div class="tool-item">SSL Labs Test</div>
+                        <div class="tool-item">WhatsMyDNS</div>
+                        <div class="tool-item">Pingdom Tools</div>
+                    </div>
+                </div>
+                <div class="conclusion">
+                    <strong>✅ Conclusión:</strong> Un dominio está bien configurado cuando todos sus registros DNS resuelven correctamente, el certificado SSL es válido, las redirecciones funcionan adecuadamente y la propagación es consistente a nivel global.
+                </div>
+            </div>
+        </div>
+        <!-- Pregunta 2 -->
+        <div class="card">
+            <div class="research-question">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <div class="question-title">¿Una aplicación web se ve igual en todos los exploradores web?</div>
+                </div>
+                <p><strong>Investigación:</strong> NO, las aplicaciones web NO se visualizan idénticamente en todos los navegadores debido a diferencias fundamentales en sus motores de renderizado y implementación de estándares.</p>
+                <div class="methodology">
+                    <h4>🎯 Análisis de Compatibilidad Cross-Browser:</h4>
+                    <h5>Factores que Generan Diferencias:</h5>
+                    <ul class="checklist">
+                        <li><strong>Motores de Renderizado Diferentes:</strong>
+                            <ul>
+                                <li>Chrome/Edge: Blink</li>
+                                <li>Firefox: Gecko</li>
+                                <li>Safari: WebKit</li>
+                            </ul>
+                        </li>
+                        <li><strong>Implementación de Estándares:</strong> Cada navegador implementa los estándares HTML5/CSS3 a diferente ritmo</li>
+                        <li><strong>Soporte de APIs JavaScript:</strong> Algunas APIs pueden tener soporte limitado o diferente comportamiento</li>
+                        <li><strong>Manejo de Fuentes:</strong> Renderizado tipográfico variable</li>
+                    </ul>
+                    <h5>Comparativa entre Navegadores Principales:</h5>
+                    <div class="browser-comparison">
+                        <div class="browser-item">
+                            <div class="browser-icon">🌐</div>
+                            <h4>Google Chrome</h4>
+                            <p><strong>Motor:</strong> Blink</p>
+                            <p><strong>Ventaja:</strong> Mayor adopción de nuevos estándares</p>
+                        </div>
+                        <div class="browser-item">
+                            <div class="browser-icon">🦊</div>
+                            <h4>Mozilla Firefox</h4>
+                            <p><strong>Motor:</strong> Gecko</p>
+                            <p><strong>Ventaja:</strong> Enfoque en privacidad y estándares abiertos</p>
+                        </div>
+                        <div class="browser-item">
+                            <div class="browser-icon">🍎</div>
+                            <h4>Apple Safari</h4>
+                            <p><strong>Motor:</strong> WebKit</p>
+                            <p><strong>Ventaja:</strong> Optimización para dispositivos Apple</p>
+                        </div>
+                    </div>
+                    <h5>Estrategias de Mitigación:</h5>
+                    <ul class="checklist">
+                        <li>Uso de CSS Reset o Normalize.css</li>
+                        <li>Feature detection con Modernizr</li>
+                        <li>Polyfills para funcionalidades no soportadas</li>
+                        <li>Testing en múltiples navegadores durante desarrollo</li>
+                    </ul>
+                </div>
+                <div class="conclusion">
+                    <strong>✅ Conclusión:</strong> Es imposible garantizar una visualización idéntica en todos los navegadores. El objetivo debe ser <strong>consistencia funcional y experiencia de usuario similar</strong>, no renderizado pixel-perfecto idéntico.
+                </div>
+            </div>
+        </div>
+        <!-- Pregunta 3 -->
+        <div class="card">
+            <div class="research-question">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <div class="question-title">¿Cómo se ve una aplicación web en un explorador del celular?</div>
+                </div>
+                <p><strong>Investigación:</strong> La visualización en dispositivos móviles presenta desafíos únicos debido a limitaciones de pantalla, interacción táctil y condiciones de red variables.</p>
+                <div class="methodology">
+                    <h4>📱 Análisis de Experiencia Mobile:</h4>
+                    <h5>Factores Críticos en Dispositivos Móviles:</h5>
+                    <ul class="checklist">
+                        <li><strong>Viewport y Responsive Design:</strong> Adaptación a diferentes tamaños de pantalla</li>
+                        <li><strong>Interacción Táctil:</strong> Touch targets mínimos de 44px</li>
+                        <li><strong>Rendimiento:</strong> Limitaciones de hardware y red móvil</li>
+                        <li><strong>Orientación:</strong> Compatibilidad portrait/landscape</li>
+                    </ul>
+                    <h5>Problemas Comunes en Mobile:</h5>
+                    <div class="code-block">
+                        /* Ejemplo de problemas típicos */
+                        - Texto demasiado pequeño para leer
+                        - Botones muy juntos para tocar con precisión
+                        - Imágenes no optimizadas para mobile
+                        - Tiempos de carga excesivos en 3G/4G
+                        - Funcionalidades que requieren hover
+                    </div>
+                    <h5>Mejores Prácticas para Mobile:</h5>
+                    <ul class="checklist">
+                        <li>Diseño Mobile-First</li>
+                        <li>Optimización de imágenes (WebP, lazy loading)</li>
+                        <li>Minificación de recursos (CSS, JS)</li>
+                        <li>Uso de meta viewport tag</li>
+                        <li>Pruebas en dispositivos reales</li>
+                    </ul>
+                    <h5>Herramientas de Testing Mobile:</h5>
+                    <div class="tools-grid">
+                        <div class="tool-item">Chrome DevTools</div>
+                        <div class="tool-item">BrowserStack</div>
+                        <div class="tool-item">Lighthouse Mobile</div>
+                        <div class="tool-item">Google PageSpeed</div>
+                    </div>
+                </div>
+                <div class="conclusion">
+                    <strong>✅ Conclusión:</strong> Una aplicación web bien diseñada para móviles debe ofrecer una experiencia optimizada con navegación táctil intuitiva, contenido legible sin zoom, tiempos de carga rápidos y funcionalidad completa adaptada al contexto móvil.
+                </div>
+            </div>
+        </div>
+        <!-- Pregunta 4 -->
+        <div class="card">
+            <div class="research-question">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <div class="question-title">¿Qué elementos se deben probar en una aplicación web?</div>
+                </div>
+                <p><strong>Investigación:</strong> Las pruebas de una aplicación web deben ser comprehensivas y cubrir múltiples dimensiones para garantizar calidad, seguridad y buena experiencia de usuario.</p>
+                <div class="methodology">
+                    <h4>🧪 Matriz Completa de Elementos a Probar:</h4>
+                    <div class="testing-matrix">
+                        <div class="matrix-category">
+                            <h4>🚀 Funcionalidad Core</h4>
+                            <ul class="checklist">
+                                <li>Flujos de navegación completos</li>
+                                <li>Formularios y validaciones</li>
+                                <li>Enlaces internos y externos</li>
+                                <li>Búsquedas y filtros</li>
+                                <li>Carrito de compras (si aplica)</li>
+                                <li>Checkout y pagos</li>
+                            </ul>
+                        </div>
+                        <div class="matrix-category">
+                            <h4>🎨 Usabilidad y UX</h4>
+                            <ul class="checklist">
+                                <li>Diseño responsive</li>
+                                <li>Navegación intuitiva</li>
+                                <li>Tiempos de carga</li>
+                                <li>Mensajes de error claros</li>
+                                <li>Accesibilidad (WCAG)</li>
+                                <li>Flujos de usuario críticos</li>
+                            </ul>
+                        </div>
+                        <div class="matrix-category">
+                            <h4>🔒 Seguridad</h4>
+                            <ul class="checklist">
+                                <li>Autenticación y autorización</li>
+                                <li>Validación de inputs</li>
+                                <li>Protección XSS/CSRF</li>
+                                <li>Headers de seguridad</li>
+                                <li>Manejo de sesiones</li>
+                                <li>Protección de datos sensibles</li>
+                            </ul>
+                        </div>
+                        <div class="matrix-category">
+                            <h4>⚡ Rendimiento</h4>
+                            <ul class="checklist">
+                                <li>Core Web Vitals</li>
+                                <li>Tiempo de respuesta del servidor</li>
+                                <li>Optimización de recursos</li>
+                                <li>Caché y compresión</li>
+                                <li>Rendimiento en redes lentas</li>
+                                <li>Escalabilidad bajo carga</li>
+                            </ul>
+                        </div>
+                        <div class="matrix-category">
+                            <h4>🌐 Compatibilidad</h4>
+                            <ul class="checklist">
+                                <li>Cross-browser testing</li>
+                                <li>Dispositivos móviles y tablets</li>
+                                <li>Diferentes sistemas operativos</li>
+                                <li>Versiones de navegadores</li>
+                                <li>Diferentes resoluciones de pantalla</li>
+                            </ul>
+                        </div>
+                        <div class="matrix-category">
+                            <h4>📱 Contenido y SEO</h4>
+                            <ul class="checklist">
+                                <li>Meta tags y estructura HTML</li>
+                                <li>URLs amigables y canonical</li>
+                                <li>Optimización de imágenes</li>
+                                <li>Contenido duplicado</li>
+                                <li>XML sitemap y robots.txt</li>
+                                <li>Schema markup</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h5>Priorización de Pruebas:</h5>
+                    <ul class="checklist">
+                        <li><strong>Crítico:</strong> Funcionalidades core que impiden el uso básico</li>
+                        <li><strong>Alto:</strong> Funcionalidades importantes para la experiencia principal</li>
+                        <li><strong>Medio:</strong> Mejoras de usabilidad y optimizaciones</li>
+                        <li><strong>Bajo:</strong> Elementos cosméticos y mejoras menores</li>
+                    </ul>
+                </div>
+                <div class="conclusion">
+                    <strong>✅ Conclusión:</strong> Se debe probar una combinación equilibrada de elementos funcionales, de rendimiento, seguridad, usabilidad y compatibilidad. La priorización debe basarse en el impacto en el usuario final y los objetivos del negocio.
+                </div>
+            </div>
+        </div>
+        <!-- Resumen Ejecutivo -->
+        <div class="card">
+            <div class="research-question">
+                <div class="question-header">
+                    <div class="question-number">📊</div>
+                    <div class="question-title">Resumen Ejecutivo de la Investigación</div>
+                </div>
+                <div class="methodology">
+                    <h4>🔑 Hallazgos Clave:</h4>
+                    <div class="testing-matrix">
+                        <div class="matrix-category">
+                            <h4>Dominio y DNS</h4>
+                            <p>La configuración correcta requiere validación múltiple de registros DNS, SSL y propagación global.</p>
+                        </div>
+                        <div class="matrix-category">
+                            <h4>Compatibilidad</h4>
+                            <p>La consistencia cross-browser es un objetivo alcanzable mediante testing proactivo y estrategias de mitigación.</p>
+                        </div>
+                        <div class="matrix-category">
+                            <h4>Experiencia Mobile</h4>
+                            <p>El diseño mobile-first es esencial dado el predominio del tráfico móvil en internet actual.</p>
+                        </div>
+                    </div>
+                    <h4>📈 Recomendaciones Generales:</h4>
+                    <ul class="checklist">
+                        <li>Implementar testing continuo en el pipeline de desarrollo</li>
+                        <li>Priorizar pruebas basadas en analytics de uso real</li>
+                        <li>Combinar testing automatizado y manual</li>
+                        <li>Considerar la diversidad de dispositivos y conexiones</li>
+                        <li>Documentar procesos y resultados sistemáticamente</li>
+                    </ul>
+                </div>
+                <div class="conclusion">
+                    <strong>🎯 Conclusión Final:</strong> Las pruebas de funcionalidad web efectivas requieren un enfoque holístico que combine validación técnica rigurosa con evaluación de experiencia de usuario, adaptándose continuamente a la evolución de tecnologías y comportamientos de uso.
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Efectos de scroll suave para mejor UX en cards y research questions
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            const researchQs = document.querySelectorAll('.research-question');
+            // Aplica animación a .card
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                cardObserver.observe(card);
+            });
+            // Aplica animación a .research-question (más pronunciada)
+            const qObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            researchQs.forEach(q => {
+                q.style.opacity = '0';
+                q.style.transform = 'translateY(30px)';
+                q.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                qObserver.observe(q);
+            });
+        });
+    </script>
+</body>
+</html>
